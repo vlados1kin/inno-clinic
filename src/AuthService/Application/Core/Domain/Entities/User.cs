@@ -3,17 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities;
 
-public class User : IdentityUser<Guid>, IEntity, IAuditable
+public class User : IdentityUser<Guid>, IEntity
 {
-    public Guid? CreatedById { get; set; }
-    
-    public User? CreatedBy { get; set; }
-    
-    public DateTimeOffset CreatedOn { get; set; }
-
-    public Guid? UpdatedById { get; set; }
-    
-    public User? UpdatedBy { get; set; }
-    
-    public DateTimeOffset UpdatedOn { get; set; }
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

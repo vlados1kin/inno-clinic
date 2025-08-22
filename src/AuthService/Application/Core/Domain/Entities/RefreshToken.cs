@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Base;
+﻿using System.Net;
+using Domain.Entities.Base;
 
 namespace Domain.Entities;
 
@@ -8,7 +9,9 @@ public class RefreshToken : IEntity
     
     public Guid UserId { get; set; }
     
-    public string Token { get; set; }
+    public string? Token { get; set; }
+    
+    public IPAddress IpAddress { get; set; } = IPAddress.None;
     
     public DateTimeOffset Issued { get; set; }
     
@@ -16,5 +19,5 @@ public class RefreshToken : IEntity
     
     public DateTimeOffset? Revoked { get; set; }
     
-    public User User { get; set; }
+    public User? User { get; set; }
 }
