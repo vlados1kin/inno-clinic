@@ -11,7 +11,7 @@ public class RefreshToken : IEntity
     
     public string? Token { get; set; }
     
-    public IPAddress IpAddress { get; set; } = IPAddress.None;
+    public string? IpAddress { get; set; }
     
     public DateTimeOffset Issued { get; set; }
     
@@ -19,5 +19,5 @@ public class RefreshToken : IEntity
     
     public DateTimeOffset? Revoked { get; set; }
     
-    public User? User { get; set; }
+    public User User { get; set; }
 }
