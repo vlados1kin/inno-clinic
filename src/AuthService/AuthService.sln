@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Application\te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "Application\test\IntegrationTests\IntegrationTests.csproj", "{B058EDC6-C431-495C-96F4-C52F3D9835A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Contracts", "Application.Contracts\Application.Contracts.csproj", "{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,18 @@ Global
 		{B058EDC6-C431-495C-96F4-C52F3D9835A0}.Release|x64.Build.0 = Release|Any CPU
 		{B058EDC6-C431-495C-96F4-C52F3D9835A0}.Release|x86.ActiveCfg = Release|Any CPU
 		{B058EDC6-C431-495C-96F4-C52F3D9835A0}.Release|x86.Build.0 = Release|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Debug|x64.Build.0 = Debug|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Debug|x86.Build.0 = Debug|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Release|x64.ActiveCfg = Release|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Release|x64.Build.0 = Release|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,5 +148,6 @@ Global
 		{CF13283B-3077-4481-81A1-29683F89A6E8} = {F47AD6BF-9BC1-9A83-A386-50CC33EF1BF4}
 		{A038C382-672A-4CEE-8693-12168BCD9A58} = {F47AD6BF-9BC1-9A83-A386-50CC33EF1BF4}
 		{B058EDC6-C431-495C-96F4-C52F3D9835A0} = {F47AD6BF-9BC1-9A83-A386-50CC33EF1BF4}
+		{4CEF9B18-4F6A-4B89-B060-3BE36E753B7F} = {BA62BD9E-80E4-793A-D89E-949C681DF295}
 	EndGlobalSection
 EndGlobal
