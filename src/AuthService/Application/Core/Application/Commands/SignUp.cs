@@ -2,12 +2,25 @@
 using Application.Contracts.DTO.SignUp;
 using Domain.Entities;
 using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace Application.Validators;
+namespace Application.Commands;
 
-internal sealed class SignUpCommandValidator : AbstractValidator<SignUpRequestDto>
+public record SignUp(SignUpRequestDto RequestDto) : IRequest;
+
+public class SignUpCommandHandler(UserManager<User> userManager) : IRequestHandler<SignUp>
+{
+    public async Task Handle(SignUp request, CancellationToken cancellationToken)
+    {
+        var user = request.RequestDto.ToUser();
+
+        await userManager.CreateAsync(user, request.RequestDto.Password);
+    }
+}
+
+public sealed class SignUpCommandValidator : AbstractValidator<SignUpRequestDto>
 {
     private readonly UserManager<User> _userManager;
     private readonly IdentityOptions _identityOptions;
@@ -59,12 +72,12 @@ internal sealed class SignUpCommandValidator : AbstractValidator<SignUpRequestDt
     private async Task<bool> HasUniqueEmail(string email, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        return !_identityOptions.User.RequireUniqueEmail || user == null;
+        return !_identityOptions.User.RequireUniqueEmail || user is null;
     }
 
     private async Task<bool> HasUniqueUserName(string userName, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByNameAsync(userName);
-        return user == null;
+        return user is null;
     }
 }
