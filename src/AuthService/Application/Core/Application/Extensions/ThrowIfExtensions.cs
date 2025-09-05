@@ -7,7 +7,7 @@ public static class ThrowIfExtensions
 {
     public static T ThrowIfNotFound<T>(this T? entity, string message) where T : IEntity
     {
-        if (entity == null)
+        if (entity is null)
             throw new NotFoundException(message);
 
         return entity;
