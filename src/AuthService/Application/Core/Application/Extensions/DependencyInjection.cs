@@ -1,7 +1,4 @@
-﻿using Application.Commands.SignUp;
-using Application.Mapper;
-using Application.Mapper.Profiles;
-using Application.Validators;
+﻿using Application.Commands;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,29 +8,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection ConfigureApplication(this IServiceCollection services)
     {
-        services.ConfigureMapper();
         services.ConfigureMediatr();
         services.ConfigureValidation();
         
         return services;
     }
 
-    private static IServiceCollection ConfigureMapper(this IServiceCollection services)
-    {
-        services.AddSingleton<MapperRegistry>(_ =>
-        {
-            var mapper = new MapperRegistry();
-            mapper.Registry(new SignUpCommandToUserMapper());
-            
-            return mapper;
-        });
-
-        return services;
-    }
-
     private static IServiceCollection ConfigureMediatr(this IServiceCollection services)
     {
-        services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<SignUpCommand>());
+        services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<SignUp>());
 
         return services;
     }

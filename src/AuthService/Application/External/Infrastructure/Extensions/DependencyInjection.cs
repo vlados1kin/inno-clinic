@@ -1,5 +1,7 @@
-﻿using Domain.Entities;
+﻿using Application.Contracts.Repositories;
+using Domain.Entities;
 using Domain.Options;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,12 +16,14 @@ public static class DependencyInjection
         services.AddDbContext<AuthDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
 
-        services.ConfigureIdentity();
+        services.ConfigureIdentity(configuration);
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         
         return services;
     }
 
-    private static IServiceCollection ConfigureIdentity(this IServiceCollection services)
+    private static IServiceCollection ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
     {
         _ = services.AddIdentity<User, IdentityRole<Guid>>(o =>
             {
@@ -36,6 +40,7 @@ public static class DependencyInjection
             })
             .AddEntityFrameworkStores<AuthDbContext>()
             .AddDefaultTokenProviders();
+        services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
 
         return services;
     }

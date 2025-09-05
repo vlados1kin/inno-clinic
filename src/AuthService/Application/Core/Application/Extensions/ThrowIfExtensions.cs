@@ -1,4 +1,4 @@
-﻿using Application.Contracts.Exceptions;
+﻿using Application.Contracts;
 using Domain.Entities.Base;
 
 namespace Application.Extensions;

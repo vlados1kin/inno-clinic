@@ -1,3 +1,8 @@
 ﻿namespace Domain.Options;
 
-public record JwtOptions(string SecretKey, string ValidIssuer, string ValidAudience, int Expires);
+public class JwtOptions
+{
+    public string ValidIssuer { get; init; } = string.Empty;
+    public string ValidAudience { get; init; } = string.Empty;
+    public int Expires { get; init; }
+}
