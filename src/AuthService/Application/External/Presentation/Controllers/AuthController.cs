@@ -1,40 +1,25 @@
 ﻿using Application.Commands;
-using Application.Contracts.DTO.SignIn;
-using Application.Contracts.DTO.SignUp;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
 [ApiController]
-[Route("auth")]
-public class AuthController(
-    ISender sender,
-    IValidator<SignUpRequestDto> signUpValidator,
-    IValidator<SignInRequestDto> signInValidator)
-    : ControllerBase
+[Route("[controller]")]
+public class AuthController(ISender sender) : ControllerBase
 {
-    [HttpPost("signup")]
-    public async Task<IActionResult> SignUp(SignUpRequestDto requestDto, CancellationToken cancellationToken)
+    [HttpPost("[action]")]
+    public async Task<IActionResult> SignUp([FromBody] SignUpCommand command, CancellationToken cancellationToken)
     {
-        await signUpValidator.ValidateAndThrowAsync(requestDto, cancellationToken);
-        
-        var signUpCommand = new SignUp(requestDto);
-        
-        await sender.Send(signUpCommand, cancellationToken);
+        await sender.Send(command, cancellationToken);
 
         return Ok();
     }
 
-    [HttpPost("signin")]
-    public async Task<IActionResult> SignIn(SignInRequestDto requestDto, CancellationToken cancellationToken)
+    [HttpPost("[action]")]
+    public async Task<IActionResult> SignIn([FromBody] SignInCommand command, CancellationToken cancellationToken)
     {
-        await signInValidator.ValidateAndThrowAsync(requestDto, cancellationToken);
-
-        var signInCommand = new SignIn(requestDto.Email, requestDto.Password);
-
-        var token = await sender.Send(signInCommand, cancellationToken);
+        var token = await sender.Send(command, cancellationToken);
 
         return Ok(token);
     }

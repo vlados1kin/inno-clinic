@@ -1,38 +1,51 @@
 ﻿using System.Linq.Expressions;
-using Application.Contracts.Repositories;
+using Domain.Abstractions;
+using Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Repositories;
 
-public abstract class BaseRepository<T>(AuthDbContext context) : IRepositoryBase<T> where T : class
+public abstract class BaseRepository<T>(AuthDbContext dbContext) : IBaseRepository<T> where T : class, IEntity
 {
-    public IQueryable<T> FindAll(bool trackChanges)
+    public async Task<List<T>> FindAllAsync(bool trackChanges, CancellationToken cancellationToken = default)
     {
-        return !trackChanges ? context.Set<T>().AsNoTracking() : context.Set<T>();
+        return !trackChanges
+            ? await dbContext.Set<T>().AsNoTracking().ToListAsync(cancellationToken)
+            : await dbContext.Set<T>().ToListAsync(cancellationToken);
     }
 
-    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+    public async Task<List<T>> FindByConditionAsync(Expression<Func<T, bool>> expression, bool trackChanges, CancellationToken cancellationToken = default)
     {
-        return !trackChanges ? context.Set<T>().Where(expression).AsNoTracking() : context.Set<T>();
+        return !trackChanges
+            ? await dbContext.Set<T>().Where(expression).AsNoTracking().ToListAsync(cancellationToken)
+            : await dbContext.Set<T>().Where(expression).ToListAsync(cancellationToken);
     }
 
-    public async Task<T?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<T?> FindByIdAsync(Guid id, bool trackChanges, CancellationToken cancellationToken = default)
     {
-        return await context.Set<T>().FindAsync([id], cancellationToken);
+        return !trackChanges 
+                ? dbContext.Set<T>().AsNoTracking().SingleOrDefaultAsync(i => i.Id == id, cancellationToken)
+                : dbContext.Set<T>().SingleOrDefaultAsync(i => i.Id == id, cancellationToken);
     }
 
-    public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
+    public ValueTask<EntityEntry<T>> CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        await context.Set<T>().AddAsync(entity, cancellationToken);
+        return dbContext.Set<T>().AddAsync(entity, cancellationToken);
     }
 
     public void Update(T entity)
     {
-        context.Set<T>().Update(entity);
+        dbContext.Set<T>().Update(entity);
     }
 
     public void Delete(T entity)
     {
-        context.Set<T>().Remove(entity);
+        dbContext.Set<T>().Remove(entity);
+    }
+
+    public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return dbContext.SaveChangesAsync(cancellationToken);
     }
 }

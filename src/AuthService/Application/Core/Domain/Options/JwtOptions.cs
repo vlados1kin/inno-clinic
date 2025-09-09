@@ -1,8 +1,20 @@
-﻿namespace Domain.Options;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class JwtOptions
+namespace Domain.Options;
+
+public sealed class JwtOptions
 {
+    [Required]
     public string ValidIssuer { get; init; } = string.Empty;
+    
+    [Required]
     public string ValidAudience { get; init; } = string.Empty;
-    public int Expires { get; init; }
+    
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int AccessTokenExpires { get; init; }
+    
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int RefreshTokenExpires { get; init; }
 }

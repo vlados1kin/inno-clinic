@@ -1,4 +1,4 @@
-﻿using Application.Contracts.Repositories;
+﻿using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Options;
 using Infrastructure.Repositories;
@@ -17,30 +17,35 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
 
         services.ConfigureIdentity(configuration);
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         
         return services;
     }
 
     private static IServiceCollection ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        _ = services.AddIdentity<User, IdentityRole<Guid>>(o =>
-            {
-                o.Password.RequireDigit = true;
-                o.Password.RequireLowercase = true;
-                o.Password.RequireUppercase = true;
-                o.Password.RequiredLength = 6;
-
-                o.User.RequireUniqueEmail = true;
-                o.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
-
-                o.Lockout.MaxFailedAccessAttempts = 5;
-                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            })
+        _ = services.AddIdentity<User, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<AuthDbContext>()
             .AddDefaultTokenProviders();
-        services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
+
+        services.Configure<IdentityOptions>(options =>
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 6;
+
+            options.User.RequireUniqueEmail = true;
+            options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
+
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        });
+        
+        services.AddOptions<JwtOptions>()
+            .Bind(configuration.GetSection(nameof(JwtOptions)))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         return services;
     }

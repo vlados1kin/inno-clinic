@@ -1,17 +1,20 @@
 using Application.Extensions;
-using Domain.Options;
 using Infrastructure.Extensions;
+using Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddUserSecrets<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddExceptionHandlers();
+builder.Services.AddProblemDetails();
 
-builder.Services.ConfigureApplication();
 builder.Services.ConfigureInfrastructure(builder.Configuration);
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
+builder.Services.ConfigureApplication();
 
 var app = builder.Build();
 
@@ -22,6 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();

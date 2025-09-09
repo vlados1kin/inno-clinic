@@ -1,30 +1,24 @@
 ﻿using Domain.Entities;
-using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
-public class AuthDbContext :IdentityDbContext<User,
+public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDbContext<User,
     IdentityRole<Guid>,
     Guid,
     IdentityUserClaim<Guid>,
     UserRole,
     IdentityUserLogin<Guid>,
     IdentityRoleClaim<Guid>,
-    IdentityUserToken<Guid>>
+    IdentityUserToken<Guid>>(options)
 {
-    public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
-    {
-    }
-    
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new RefreshTokenConfiguration());
-        builder.ApplyConfiguration(new UserConfiguration());
+        builder.ApplyConfigurationsFromAssembly(typeof(AuthDbContext).Assembly);
         
         base.OnModelCreating(builder);
     }
